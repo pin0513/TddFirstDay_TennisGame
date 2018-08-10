@@ -27,33 +27,63 @@ namespace TennisGameTests20180810
 
         public string Score()
         {
-            if (_firstPlayerScore != _secondPlayerScore)
+            if (IsDiffScore())
             {
-                if (_firstPlayerScore >= 3 && _secondPlayerScore >= 3)
+                if (IsGamePoint())
                 {
-                    if (Math.Abs(_firstPlayerScore - _secondPlayerScore) == 1)
+                    if (IsAdv())
                     {
-                        return (_firstPlayerScore > _secondPlayerScore ? _firstPlayerName : _secondPlayerName) + " Adv";
+                        return AdvPlayer() + " Adv";
                     }
-                    if (Math.Abs(_firstPlayerScore - _secondPlayerScore) > 1)
+                    if (IsWin())
                     {
-                        return (_firstPlayerScore > _secondPlayerScore ? _firstPlayerName : _secondPlayerName) + " Win";
+                        return AdvPlayer() + " Win";
                     }
                 }
-
-                if (_firstPlayerScore > 3 || _secondPlayerScore > 3)
-                {
-                    if (Math.Abs(_firstPlayerScore - _secondPlayerScore) > 1)
-                        return (_firstPlayerScore > _secondPlayerScore ? _firstPlayerName : _secondPlayerName) + " Win";
-                }
-                return _scoreLookUp[_firstPlayerScore] + " " + _scoreLookUp[_secondPlayerScore];
+                return NormalLookupState();
             }
 
+            return SameScoreState();
+        }
+
+        private string AdvPlayer()
+        {
+            return (_firstPlayerScore > _secondPlayerScore ? _firstPlayerName : _secondPlayerName);
+        }
+
+        private bool IsWin()
+        {
+            return Math.Abs(_firstPlayerScore - _secondPlayerScore) > 1;
+        }
+
+        private bool IsAdv()
+        {
+            return Math.Abs(_firstPlayerScore - _secondPlayerScore) == 1;
+        }
+
+        private bool IsGamePoint()
+        {
+            return _firstPlayerScore > 3 || _secondPlayerScore > 3;
+        }
+
+        private string NormalLookupState()
+        {
+            return _scoreLookUp[_firstPlayerScore] + " " + _scoreLookUp[_secondPlayerScore];
+        }
+
+        private string SameScoreState()
+        {
             if (_firstPlayerScore >= 3)
             {
                 return "Deuce";
             }
+
             return _scoreLookUp[_firstPlayerScore] + " All";
+        }
+
+        private bool IsDiffScore()
+        {
+            return _firstPlayerScore != _secondPlayerScore;
         }
 
         public void FirstPlayerScore()
